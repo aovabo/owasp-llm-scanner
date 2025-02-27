@@ -4,7 +4,7 @@ setup(
     name="llm-scanner-monitor",
     version="0.1.0",
     description="Monitoring package for LLM Security Scanner",
-    author="Your Name",
+    author="Alexander",
     packages=find_packages(),
     install_requires=[
         "llm-security-scanner>=0.1.0",
