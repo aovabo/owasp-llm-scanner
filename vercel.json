@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "scanner/vercel_app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "scanner/vercel_app.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "scanner/vercel_app.py"
+    }
+  ],
+  "env": {
+    "PYTHON_VERSION": "3.10",
+    "DEPLOYMENT_ENV": "vercel",
+    "IS_WEB_UI": "true"
+  },
+  "functions": {
+    "scanner/vercel_app.py": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
+} 

@@ -1,25 +1,66 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List
+from enum import Enum
+from typing import Dict, Any, List, Optional
 
+class VulnerabilityType(Enum):
+    """OWASP Top 10 LLM Vulnerability Categories"""
+    PROMPT_INJECTION = "LLM01:2025 Prompt Injection"
+    OUTPUT_HANDLING = "LLM02:2025 Insecure Output Handling"
+    DATA_POISONING = "LLM03:2025 Training Data Poisoning"
+    DENIAL_OF_SERVICE = "LLM04:2025 Model Denial of Service"
+    SUPPLY_CHAIN = "LLM05:2025 Supply Chain Vulnerabilities"
+    SENSITIVE_DISCLOSURE = "LLM06:2025 Sensitive Information Disclosure"
+    PLUGIN_SECURITY = "LLM07:2025 Insecure Plugin Design"
+    EXCESSIVE_AGENCY = "LLM08:2025 Excessive Agency"
+    OVERRELIANCE = "LLM09:2025 Overreliance"
+    MODEL_THEFT = "LLM10:2025 Model Theft"
+
+class Severity(Enum):
+    """Vulnerability severity levels"""
+    CRITICAL = "CRITICAL"
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+    INFO = "INFO"
 
 class BaseProbe(ABC):
-    """Base class for all probes"""
+    """Base class for all OWASP LLM vulnerability probes"""
     
-    def __init__(self, name: str, description: str):
+    def __init__(self, 
+                 name: str,
+                 description: str,
+                 vulnerability_type: VulnerabilityType,
+                 severity: Severity = Severity.HIGH):
         self.name = name
         self.description = description
-        self.results = []
+        self.vulnerability_type = vulnerability_type
+        self.severity = severity
+        self.results: List[Dict[str, Any]] = []
 
     @abstractmethod
     async def run(self, target: Any) -> Dict[str, Any]:
-        """Run the probe against the target"""
+        """Execute the probe against the target LLM"""
         pass
 
+    def add_finding(self, 
+                   details: str,
+                   evidence: Any,
+                   severity: Optional[Severity] = None,
+                   mitigation: Optional[str] = None) -> None:
+        """Add a vulnerability finding to the probe results"""
+        self.results.append({
+            "vulnerability_type": self.vulnerability_type.value,
+            "severity": (severity or self.severity).value,
+            "details": details,
+            "evidence": evidence,
+            "mitigation": mitigation
+        })
+
     def get_results(self) -> List[Dict[str, Any]]:
-        """Return probe results"""
+        """Return all findings from this probe"""
         return self.results
 
-    def clear_results(self):
+    def clear_results(self) -> None:
         """Clear previous results"""
         self.results = []
 

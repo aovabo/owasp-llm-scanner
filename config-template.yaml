@@ -1,0 +1,63 @@
+# LLM Security Scanner Configuration
+
+# Provider Settings
+provider:
+  name: openai  # openai, anthropic, google, azure, cohere
+  model: gpt-4  # optional, provider-specific model name
+  api_key: ${OPENAI_API_KEY}  # use environment variable
+
+# Scan Settings
+scan:
+  vulnerabilities:  # leave empty to test all
+    - PROMPT_INJECTION
+    - DATA_DISCLOSURE
+    - PROMPT_LEAKAGE
+  
+  output:
+    format: html  # html or json
+    path: scan_report.html
+
+# Alert Settings (optional)
+alerts:
+  slack:
+    webhook_url: ${SLACK_WEBHOOK_URL}
+  email:
+    to: ${ALERT_EMAIL}
+
+# Logging
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  file: scanner.log
+
+target:
+  timeout: 300
+  max_tokens: 2000
+  temperature: 0.7
+
+probes:
+  prompt_injection:
+    enabled: true
+    timeout: 30
+    max_retries: 3
+  
+  data_disclosure:
+    enabled: true
+    timeout: 30
+    max_retries: 3
+  
+  # ... other probes ...
+
+output:
+  format: markdown
+  include_evidence: true
+  save_artifacts: true
+
+analysis:
+  risk_threshold: 7
+  enable_visualizations: true
+  track_history: true
+
+monitoring:
+  enabled: false
+  interval: 3600  # 1 hour
+  alert_threshold: HIGH 

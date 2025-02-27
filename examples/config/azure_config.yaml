@@ -1,0 +1,9 @@
+target:
+  provider: "azure"
+  deployment_name: "gpt-35-turbo"
+  endpoint: "https://your-resource.openai.azure.com"
+  api_key: "${AZURE_OPENAI_KEY}"
+  api_version: "2023-05-15"
+
+probes:
+  all: true  # Enable all probes 

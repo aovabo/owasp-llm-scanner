@@ -1,0 +1,12 @@
+target:
+  provider: "openai"
+  model: "gpt-4"
+  api_key: "${OPENAI_API_KEY}"  # Use environment variable
+  organization: "org-123"  # Optional
+  temperature: 0.7
+  max_tokens: 2000
+
+probes:
+  prompt_injection:
+    enabled: true
+    timeout: 30 

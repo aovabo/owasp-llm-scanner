@@ -1,0 +1,33 @@
+service: llm-scanner
+
+provider:
+  name: aws
+  runtime: python3.10
+  region: ${opt:region, 'us-west-2'}
+  environment:
+    DATABASE_URL: ${ssm:/scanner/database-url}
+    SECRET_KEY: ${ssm:/scanner/secret-key}
+
+functions:
+  api:
+    handler: scanner.serverless.handler
+    events:
+      - http:
+          path: /api/{proxy+}
+          method: ANY
+    environment:
+      PYTHONPATH: .
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+
+custom:
+  wsgi:
+    app: scanner.ui.api.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: true
+    layer:
+      name: scanner-deps
+      description: Scanner Python dependencies 

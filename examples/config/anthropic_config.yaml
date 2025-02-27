@@ -1,0 +1,11 @@
+target:
+  provider: "anthropic"
+  model: "claude-2"
+  api_key: "${ANTHROPIC_API_KEY}"
+  temperature: 0.7
+  max_tokens: 4000
+
+probes:
+  data_disclosure:
+    enabled: true
+    timeout: 30 
